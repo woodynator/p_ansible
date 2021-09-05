@@ -1,0 +1,59 @@
+# yum_tasks.yml
+---
+  - hosts: servers
+    gather_facts: no
+    become: true    
+    tasks: 
+
+      - name: Full OS update. 
+        yum: 
+          name: '*' 
+          state: latest
+        notify: reboot server
+
+      - name: apache, php, mysql
+        yum:
+          name:
+            - httpd
+            - mysql
+            - php
+            - php-cli
+          state: present
+
+    handlers:
+      - name: reboot server
+        reboot:
+          reboot_timeout: 20
+          test_command: whoami 
+      - notify: wait for ssh
+
+      - name: wait for ssh
+        wait_for:
+          port: 22
+          host: '{{ (ansible_ssh_host|default(ansible_host))|default(inventory_hostname) }}'
+          delay: 10
+        delegate_to: localhost
+
+
+# for PHP7.4 I should add a third party repo, because the available 
+# version in the default repo is 7.2. I will not # add this repo for 
+# security reasons. However, this is how I would've done it: 
+
+#      - name: install epel and php7.4 repo from remote
+#        yum:
+#          name: 
+#            - https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+#            - https://rpms.remirepo.net/enterprise/remi-release-7.rpm
+#          state: present
+
+#      - name: install yum-config and enable repo
+#        yum: name=yum-utils state=present
+#        cmd: yum-config-manager --enable remi-php74
+      
+#     - name: update packages and install php
+#        yum: name=* state=latest
+#        yum:
+#          name:
+#            - php-7.4
+#            - php-cli
+#          state: present

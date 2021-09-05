@@ -1,0 +1,38 @@
+# setup.yml
+---
+  - hosts: servers
+    gather_facts: no
+    become: true    
+    tasks: 
+      - name: ping servers
+        action: ping 
+
+      - name: uname servers (using shell command?)
+        shell: 
+          cmd: uname -a 
+        register: unameout
+          
+      - debug: msg="{{ unameout }}"
+
+      - name: whoami servers (using shell command?)
+        shell: 
+          cmd: whoami 
+        register: whout
+          
+      - debug: msg="{{ whout }}"
+
+#      - name: Print all available facts
+#        ansible.builtin.debug:
+#          var: ansible_facts
+
+#      - name: Update yum packages
+#        # yum: name=* state=latest
+#        yum:
+        
+#      - name: Install a list of packages
+#        yum:
+#          name:
+#            - nginx
+#          - postgresql
+#          - postgresql-server
+#        state: present

@@ -1,0 +1,7 @@
+# hosts-dev
+
+[servers]
+192.168.122.60
+
+[local]
+control ansible_connection=local
