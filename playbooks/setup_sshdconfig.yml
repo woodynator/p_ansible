@@ -1,0 +1,49 @@
+# setup_configs.yml
+---
+  - hosts: servers
+    gather_facts: no
+    become: true    
+    tasks: 
+      - name: update ssh config
+        #replacing the 3 lines at once. 
+        lineinfile:
+          dest: /etc/ssh/sshd_config
+          regexp: "{{ item.regexp }}"
+          line: "{{ item.line }}"
+        loop:
+          - { regexp: '^PubkeyAuthentication', line: 'PubkeyAuthentication yes' }
+          - { regexp: '^PermitRootLogin', line: 'PermitRootLogin no' }
+          - { regexp: '^PasswordAuthentication', line: 'PasswordAuthentication no' }
+        notify: restart sshd
+
+    handlers:
+      - name: restart sshd
+        service: 
+          name: sshd 
+          state: restarted   
+      
+
+# this is the template for replacing a line each time, 
+# from before I knew I could replace more than once at a time. 
+#        lineinfile:
+#          path: /etc/ssh/sshd_config
+#          state: present
+#          regexp: '^PermitRootLogin'
+#          line: 'PermitRootLogin no'
+#        notify: restart sshd
+#
+#        PubkeyAuthentication yes
+# This should be enable to enable ansible... but leaving this anyway. 
+#      - name: update ssh config
+#          lineinfile:
+#            path: /etc/sudoers
+#            state: present
+#            regexp: '^PubkeyAuthentication'
+#            line: 'PubkeyAuthentication yes'
+#      - name: set up sudoers
+#          lineinfile:
+#            path: /etc/sudoers
+#            state: present
+#            regexp: '^woody ALL='
+#            line: '^woody ALL=(ALL) NOPASSWD: ALL'
+#            validate: '/usr/sbin/visudo -cf %s'
