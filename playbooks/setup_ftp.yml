@@ -28,7 +28,10 @@
           - { regexp: 'local_enable', line: 'local_enable=YES' }
           - { regexp: 'anonymous_enable', line: 'anonymous_enable=NO' }
         notify: restart vsftpd
-      
+        
+      - name: enabling vsftpd on boot. 
+        service: name=vsftpd enabled=yes
+
     handlers:
       - name: restart vsftpd
         service: name=vsftpd state=restarted
