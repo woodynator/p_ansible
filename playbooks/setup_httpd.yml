@@ -1,0 +1,17 @@
+# setup_httpd.yml
+  - hosts: servers
+    gather_facts: no
+    become: true    
+    tasks: 
+      - name: create vhosts dirs
+        file:
+          path: 
+            /var/www/red.tq
+            /var/www/jo.red.tq
+            /var/www/jo.stage-env
+            /var/www/jo.accept-env
+            /var/www/ma.red.tq
+            /var/www/ma.stage-env
+            /var/www/ma.accept-env
+          state: directory
+
