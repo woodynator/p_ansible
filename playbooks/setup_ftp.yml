@@ -1,0 +1,37 @@
+# setup_ftp.yml
+  - hosts: servers
+    gather_facts: no
+    become: true    
+    tasks: 
+      - name: install ftp server and client
+        yum: 
+          name: 
+            - vsftpd
+          state: present
+      
+      - name: backup original config
+        shell:
+          cmd: cp /etc/vsftpd/vsftpd.conf /etc/vsftpd/vsftpd.conf_orig
+
+# I should change this if I enable anon access
+# maybe change directories too :P
+#      - name: create ftp dir
+#        file: path=/srv/ftp/root state=directory 
+
+      - name: setting ftp config
+        lineinfile:
+          dest: /etc/vsftpd/vsftpd.conf
+          regexp: "{{ item.regexp }}"
+          line: "{{ item.line }}"
+        loop:
+          - { regexp: 'write_enable', line: 'write_enable=YES' }
+          - { regexp: 'local_enable', line: 'local_enable=YES' }
+          - { regexp: 'anonymous_enable', line: 'anonymous_enable=NO' }
+        notify: restart vsftpd
+      
+    handlers:
+      - name: restart vsftpd
+        service: name=vsftpd state=restarted
+
+
+      
