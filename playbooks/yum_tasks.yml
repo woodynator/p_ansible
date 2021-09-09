@@ -20,6 +20,12 @@
             - php-cli
             - snapd
           state: present
+      
+      - name: enable snapd classic confinement
+        file:
+          src: /var/lib/snapd/snap
+          dest: /snap
+          state: link
 
     handlers:
       - name: reboot server
