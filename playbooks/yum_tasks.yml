@@ -26,7 +26,7 @@
         reboot:
           reboot_timeout: 20
           test_command: whoami 
-      - notify: wait for ssh
+        notify: wait for ssh
 
       - name: wait for ssh
         wait_for:

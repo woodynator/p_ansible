@@ -1,0 +1,18 @@
+# setup_services.yml
+---
+  - hosts: servers
+    gather_facts: no
+    become: true    
+    tasks: 
+    - name: enable httpd.
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+
+    - name: enable snapd.
+      service:
+        name: snapd
+        state: started
+        enabled: yes
+
