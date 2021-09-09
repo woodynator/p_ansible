@@ -3,6 +3,13 @@
     gather_facts: no
     become: true    
     tasks: 
+    - name: allow ssh
+      firewalld:
+        service: ssh
+        permanent: true
+        state: enabled
+        immediate: yes
+
     - name: allow https
       firewalld:
         service: https
@@ -24,10 +31,10 @@
         state: enabled
         immediate: yes
 
-    - name: allow control ip (test)
-      firewalld:
-        source: 192.168.123.1/32
-        permanent: true
-        state: disabled
-        immediate: yes
+#    - name: allow control ip (2)
+#      firewalld:
+#        source: 192.168.123.1/32
+#        permanent: true
+#        state: disabled
+#        immediate: yes
 
