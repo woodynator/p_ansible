@@ -3,26 +3,31 @@
     gather_facts: no
     become: true    
     tasks: 
-      - name: block ssh for all ips
-        iptables:
-          chain: INPUT
-          source: 0.0.0.0
-          protocol: tcp
-          destination_port: "22"
-          jump: DROP
-      
-      - name: allow control host to ssh
-        iptables:
-          chain: INPUT
-          source: 192.168.122.1
-          protocol: tcp
-          destination_port: "22"
-          jump: ACCEPT
-      
-      - name: install iptables-services
-        yum: name=iptables-services state=present
+    - name: allow https
+      firewalld:
+        service: https
+        permanent: true
+        state: enabled
+        immediate: yes
 
-      - name: make iptables rules persistent
-        shell:
-          cmd: service iptables save
-          warn: false
+    - name: allow http
+      firewalld:
+        service: http
+        permanent: true
+        state: enabled
+        immediate: yes
+
+    - name: allow control ip
+      firewalld:
+        source: 192.168.122.1/32
+        permanent: true
+        state: enabled
+        immediate: yes
+
+    - name: allow control ip (test)
+      firewalld:
+        source: 192.168.123.1/32
+        permanent: true
+        state: disabled
+        immediate: yes
+
