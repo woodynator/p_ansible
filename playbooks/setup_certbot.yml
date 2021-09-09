@@ -14,6 +14,8 @@
           dest: /usr/bin/certbot
           state: link
       
-      - name: certbot --apache ()
-        shell: 
-          cmd: certbot --apache -n -m user@domain.com -d domain
+
+# I should look for a way to get this done without running tons of cmds
+#     - name: certbot --apache ()
+#        shell: 
+#          cmd: certbot --apache -n -m user@domain.com -d domain
