@@ -7,7 +7,7 @@
     - name: enable httpd.
       service:
         name: httpd
-        state: started
+        state: restarted
         enabled: yes
 
     - name: enable snapd.

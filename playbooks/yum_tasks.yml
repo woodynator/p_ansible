@@ -19,6 +19,8 @@
             - php
             - php-cli
             - snapd
+            - mod_ssl
+            - epel-release
           state: present
       
       - name: enable snapd classic confinement

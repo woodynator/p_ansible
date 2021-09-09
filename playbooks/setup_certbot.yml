@@ -4,15 +4,16 @@
     gather_facts: no
     become: true    
     tasks: 
-      - 
-      - name: snap install --classic certbot
+      - name: install certbot (snap)
         shell: 
           cmd: snap install --classic certbot
+
+      - name: symlink certbot
+        file:
+          src: /snap/bin/certbot
+          dest: /usr/bin/certbot
+          state: link
       
-      - name: ln -s /snap/bin/certbot /usr/bin/certbot
+      - name: certbot --apache ()
         shell: 
-          cmd: ln -s /snap/bin/certbot /usr/bin/certbot
- 
-      - name: certbot --apache
-        shell: 
-          cmd: certbot --apache
+          cmd: certbot --apache -n -m user@domain.com -d domain
