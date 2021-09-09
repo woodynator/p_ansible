@@ -11,13 +11,14 @@
           state: latest
         notify: reboot server
 
-      - name: apache, php, mysql
+      - name: apache, php, mysql, snapd
         yum:
           name:
             - httpd
             - mysql
             - php
             - php-cli
+            - snapd
           state: present
 
     handlers:
